@@ -7,5 +7,4 @@ import br.com.fiap.ecommerce.model.ItemPedido;
 
 @Repository
 public interface ItemPedidoRepository extends JpaRepository<ItemPedido, Long> {
-
 }

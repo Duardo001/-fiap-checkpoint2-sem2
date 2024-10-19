@@ -11,13 +11,18 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import br.com.fiap.ecommerce.dtos.ClienteRequestCreateDto;
 import br.com.fiap.ecommerce.dtos.ClienteRequestUpdateDto;
 import br.com.fiap.ecommerce.dtos.ClienteResponseDto;
 import br.com.fiap.ecommerce.mapper.ClienteMapper;
+import br.com.fiap.ecommerce.repository.ClienteRepository;
 import br.com.fiap.ecommerce.service.ClienteService;
+import br.com.fiap.ecommerce.views.ClienteFullView;
+import br.com.fiap.ecommerce.views.ClienteSimpleView;
+import br.com.fiap.ecommerce.views.ClienteViewType;
 import lombok.RequiredArgsConstructor;
 
 @RestController
@@ -27,6 +32,7 @@ public class ClienteController {
 
     private final ClienteService clienteService;
     private final ClienteMapper clienteMapper;
+    private final ClienteRepository clienteRepository;
 
     @GetMapping
     public ResponseEntity<List<ClienteResponseDto>> list() {
@@ -78,4 +84,17 @@ public class ClienteController {
                                 .orElseThrow(() -> new RuntimeException("Id inexistente")));
     }
 
+    @GetMapping("/find")
+    public ResponseEntity<?> findByNome(
+            @RequestParam String nome,
+            ClienteViewType type) {
+
+        switch (type) {
+            case FULL:
+                return ResponseEntity.ok().body(clienteRepository.findAllByNomeContains(nome, ClienteFullView.class));
+            case SIMPLE:
+                return ResponseEntity.ok().body(clienteRepository.findAllByNomeContains(nome, ClienteSimpleView.class));
+        }
+        return ResponseEntity.noContent().build();
+    }
 }

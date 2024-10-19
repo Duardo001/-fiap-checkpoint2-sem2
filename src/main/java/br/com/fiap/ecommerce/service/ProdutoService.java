@@ -18,11 +18,11 @@ public class ProdutoService {
         return produtoRepository.findAll();
     }
 
-    public Produto save(Produto produto) {        
+    public Produto save(Produto produto) {
         return produtoRepository.save(produto);
     }
 
-    public boolean existsById(Long id) {        
+    public boolean existsById(Long id) {
         return produtoRepository.existsById(id);
     }
 
@@ -33,5 +33,5 @@ public class ProdutoService {
     public Optional<Produto> findById(Long id) {
         return produtoRepository.findById(id);
     }
-   
+
 }
