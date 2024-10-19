@@ -11,13 +11,18 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import br.com.fiap.ecommerce.dtos.PedidoRequestCreateDto;
 import br.com.fiap.ecommerce.dtos.PedidoRequestUpdateDto;
 import br.com.fiap.ecommerce.dtos.PedidoResponseDto;
 import br.com.fiap.ecommerce.mapper.PedidoMapper;
+import br.com.fiap.ecommerce.repository.PedidoRepository;
 import br.com.fiap.ecommerce.service.PedidoService;
+import br.com.fiap.ecommerce.views.PedidoFullView;
+import br.com.fiap.ecommerce.views.PedidoSimpleView;
+import br.com.fiap.ecommerce.views.ProdutoViewType;
 import lombok.RequiredArgsConstructor;
 
 @RestController
@@ -26,7 +31,7 @@ import lombok.RequiredArgsConstructor;
 public class PedidoController {
     private final PedidoService pedidoService;
     private final PedidoMapper pedidoMapper;
-
+    private final PedidoRepository pedidoRepository;
 
     @GetMapping
     public ResponseEntity<List<PedidoResponseDto>> list() {
@@ -76,6 +81,22 @@ public class PedidoController {
                                 .findById(id)
                                 .map(e -> pedidoMapper.toDto(e))
                                 .orElseThrow(() -> new RuntimeException("Id inexistente")));
+    }
+
+    @GetMapping("/find")
+    public ResponseEntity<?> findByStatus(
+            @RequestParam String status,
+            ProdutoViewType type) {
+
+        switch (type) {
+            case FULL:
+                return ResponseEntity.ok()
+                        .body(pedidoRepository.findAllByStatusContains(status, PedidoFullView.class));
+            case SIMPLE:
+                return ResponseEntity.ok()
+                        .body(pedidoRepository.findAllByStatusContains(status, PedidoSimpleView.class));
+        }
+        return ResponseEntity.noContent().build();
     }
 
 }
