@@ -4,8 +4,8 @@ import lombok.Data;
 
 @Data
 public class ClienteResponseDto {
-	private Long id;
-	private String nome;
+    private Long id;
+    private String nome;
     private String cep;
     private String logradouro;
     private String numero;
@@ -13,5 +13,5 @@ public class ClienteResponseDto {
     private String bairro;
     private String municipio;
     private String uf;
-    
+
 }

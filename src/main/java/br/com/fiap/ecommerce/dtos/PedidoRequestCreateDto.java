@@ -6,14 +6,13 @@ import java.time.LocalDate;
 import lombok.Getter;
 import lombok.Setter;
 
-
 @Getter
 @Setter
 public class PedidoRequestCreateDto {
-	private Long idCliente;
+    private Long idCliente;
     private LocalDate dataPedido;
     private String status;
     private String formaPagamento;
     private BigDecimal valorTotal;
-    
+
 }

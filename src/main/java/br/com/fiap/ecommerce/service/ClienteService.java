@@ -1,9 +1,10 @@
 package br.com.fiap.ecommerce.service;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
 import java.util.List;
 import java.util.Optional;
+
+import org.springframework.stereotype.Service;
+
 import br.com.fiap.ecommerce.model.Cliente;
 import br.com.fiap.ecommerce.repository.ClienteRepository;
 import lombok.RequiredArgsConstructor;

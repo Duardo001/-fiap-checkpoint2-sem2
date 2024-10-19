@@ -27,7 +27,6 @@ public class ItemPedidoController {
 
     private final ItemPedidoService itemPedidoService;
     private final ItemPedidoMapper itemPedidoMapper;
-    // private final ItemPedidoRepository itemPedidoRepository;
 
     @GetMapping
     public ResponseEntity<List<ItemPedidoResponseDto>> list() {
@@ -35,7 +34,6 @@ public class ItemPedidoController {
                 .stream()
                 .map(e -> itemPedidoMapper.toDto(e))
                 .toList();
-
         return ResponseEntity.ok().body(dtos);
     }
 
@@ -66,7 +64,6 @@ public class ItemPedidoController {
         if (!itemPedidoService.existsById(id)) {
             throw new RuntimeException("Id inexistente");
         }
-
         itemPedidoService.delete(id);
     }
 
@@ -78,7 +75,6 @@ public class ItemPedidoController {
                                 .findById(id)
                                 .map(e -> itemPedidoMapper.toDto(e))
                                 .orElseThrow(() -> new RuntimeException("Id inexistente")));
-
     }
 
 }

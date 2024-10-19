@@ -1,6 +1,5 @@
 package br.com.fiap.ecommerce.controller;
 
-
 import java.util.List;
 
 import org.springframework.http.HttpStatus;
@@ -29,7 +28,7 @@ import lombok.RequiredArgsConstructor;
 @RestController
 @RequestMapping("/produtos")
 @RequiredArgsConstructor
-public class ProdutoController {    
+public class ProdutoController {
     private final ProdutoService produtoService;
     private final ProdutoMapper produtoMapper;
     private final ProdutoRepository produtoRepository;
@@ -37,68 +36,65 @@ public class ProdutoController {
     @GetMapping
     public ResponseEntity<List<ProdutoResponseDto>> list() {
         List<ProdutoResponseDto> dtos = produtoService.list()
-            .stream()
-            .map(e -> produtoMapper.toDto(e))
-            .toList();
-        
+                .stream()
+                .map(e -> produtoMapper.toDto(e))
+                .toList();
+
         return ResponseEntity.ok().body(dtos);
     }
 
     @PostMapping
-    public ResponseEntity<ProdutoResponseDto> create(@RequestBody ProdutoRequestCreateDto dto) {        
+    public ResponseEntity<ProdutoResponseDto> create(@RequestBody ProdutoRequestCreateDto dto) {
 
         return ResponseEntity
-        		.status(HttpStatus.CREATED)
-        		.body(
-        			produtoMapper.toDto(
-        					produtoService.save(produtoMapper.toModel(dto)))
-        			);
+                .status(HttpStatus.CREATED)
+                .body(
+                        produtoMapper.toDto(
+                                produtoService.save(produtoMapper.toModel(dto))));
     }
 
     @PutMapping("{id}")
     public ResponseEntity<ProdutoResponseDto> update(
-                        @PathVariable Long id, 
-                        @RequestBody ProdutoRequestUpdateDto dto) {
-        if (! produtoService.existsById(id)){
+            @PathVariable Long id,
+            @RequestBody ProdutoRequestUpdateDto dto) {
+        if (!produtoService.existsById(id)) {
             throw new RuntimeException("Id inexistente");
-        }                
+        }
         return ResponseEntity.ok()
-        		.body(
-        			produtoMapper.toDto(
-        				produtoService.save(produtoMapper.toModel(id, dto)))
-        		);
+                .body(
+                        produtoMapper.toDto(
+                                produtoService.save(produtoMapper.toModel(id, dto))));
     }
-    
+
     @DeleteMapping("{id}")
     public void delete(@PathVariable Long id) {
-        if (! produtoService.existsById(id)){
-        	throw new RuntimeException("Id inexistente");
+        if (!produtoService.existsById(id)) {
+            throw new RuntimeException("Id inexistente");
         }
 
         produtoService.delete(id);
     }
 
     @GetMapping("{id}")
-    public ResponseEntity<ProdutoResponseDto> findById(@PathVariable Long id) {    	
-    	return ResponseEntity.ok()
-    			.body(
-    				produtoService
-    					.findById(id)
-    					.map(e -> produtoMapper.toDto(e))
-    					.orElseThrow(() -> new RuntimeException("Id inexistente"))
-    			);    	  		     
+    public ResponseEntity<ProdutoResponseDto> findById(@PathVariable Long id) {
+        return ResponseEntity.ok()
+                .body(
+                        produtoService
+                                .findById(id)
+                                .map(e -> produtoMapper.toDto(e))
+                                .orElseThrow(() -> new RuntimeException("Id inexistente")));
     }
-    
+
     @GetMapping("/find")
-    public  ResponseEntity<?> findByNome(
-                @RequestParam String nome, 
-                ProdutoViewType type) { 
+    public ResponseEntity<?> findByNome(
+            @RequestParam String nome,
+            ProdutoViewType type) {
 
         switch (type) {
             case FULL:
-                return ResponseEntity.ok().body(produtoRepository.findAllByNomeContains(nome, ProdutoFullView.class));                
+                return ResponseEntity.ok().body(produtoRepository.findAllByNomeContains(nome, ProdutoFullView.class));
             case SIMPLE:
-                return ResponseEntity.ok().body(produtoRepository.findAllByNomeContains(nome, ProdutoSimpleView.class));            
+                return ResponseEntity.ok().body(produtoRepository.findAllByNomeContains(nome, ProdutoSimpleView.class));
         }
         return ResponseEntity.noContent().build();
     }
